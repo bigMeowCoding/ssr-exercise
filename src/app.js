@@ -1,7 +1,7 @@
-import { createApp as creatA } from "vue";
+import { createSSRApp } from "vue";
 
 export default function createApp() {
-  return creatA({
+  return createSSRApp({
     data: () => ({ count: 1 }),
     template: `<div @click="count++">{{ count }}</div>`,
   });

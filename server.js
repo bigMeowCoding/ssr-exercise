@@ -5,6 +5,7 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const isDev = process.env.NODE_ENV === "development";
 
 async function createServer() {
   const app = express();
@@ -20,6 +21,7 @@ async function createServer() {
   // use vite's connect instance as middleware
   // if you use your own express router (express.Router()), you should use router.use
   app.use(vite.middlewares);
+  // app.use(express.static("./dist"));
 
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
@@ -27,7 +29,10 @@ async function createServer() {
     try {
       // 1. Read index.html
       let template = fs.readFileSync(
-        path.resolve(__dirname, "index.html"),
+        path.resolve(
+          __dirname,
+          isDev ? "index.html" : "./dist/client/index.html"
+        ),
         "utf-8"
       );
 
@@ -39,13 +44,21 @@ async function createServer() {
       // 3. Load the server entry. vite.ssrLoadModule automatically transforms
       //    your ESM source code to be usable in Node.js! There is no bundling
       //    required, and provides efficient invalidation similar to HMR.
-      const { render } = await vite.ssrLoadModule("/src/entry-server.js");
+      let render = null;
+      if (isDev) {
+        const ret = await vite.ssrLoadModule("/src/entry-server.js");
+        render = ret.render;
+      } else {
+        const ret = await import("./dist/server/entry-server.js");
+        console.log("sdfdf", ret);
+        render = ret.render;
+      }
 
       // 4. render the app HTML. This assumes entry-server.js's exported `render`
       //    function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
       const appHtml = await render(url);
-
+      console.log(appHtml);
       // 5. Inject the app-rendered HTML into the template.
       const html = template.replace(`<!--ssr-outlet-->`, appHtml);
 
