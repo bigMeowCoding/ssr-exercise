@@ -3,10 +3,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import { createServer as createViteServer } from "vite";
+import httpProxy from "http-proxy-middleware";
+const proxy = httpProxy.createProxyMiddleware;
 
+// import mock from "express-mock-api-middleware";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === "development";
-
 async function createServer() {
   const app = express();
 
@@ -22,6 +24,26 @@ async function createServer() {
   // if you use your own express router (express.Router()), you should use router.use
   app.use(vite.middlewares);
   // app.use(express.static("./dist"));
+  // const mockApiMiddleware = mock(path.resolve(__dirname, "mock"), {
+  //   ignore: ["asm.js"],
+  // });
+  app.use("/", (req, res, next) => {
+    if (req.path === "/api3/test") {
+      res.send({ code: "412", msg: "mock" });
+    }
+    console.log("req", req.path);
+    next();
+  });
+  app.use(
+    "/api3",
+    proxy({
+      target: "http://localhost:3333",
+      changeOrigin: true,
+      pathRewrite: {
+        "^/api3": "/", // rewrite path
+      },
+    })
+  );
 
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;

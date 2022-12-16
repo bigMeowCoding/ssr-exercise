@@ -1,10 +1,8 @@
 import { createSSRApp } from "vue/dist/vue.esm-bundler";
+import app from "./components/app.vue";
 
 function createApp() {
-  return createSSRApp({
-    data: () => ({ count: 1 }),
-    template: `<div @click="count++">{{ count }}</div>`,
-  });
+  return createSSRApp(app);
 }
 
 createApp().mount("#app");
