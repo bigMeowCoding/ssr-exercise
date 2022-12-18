@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import httpProxy from "http-proxy-middleware";
+import createMockMiddle from "./middleware/mock-api-middleware.js";
 const proxy = httpProxy.createProxyMiddleware;
 
 // import mock from "express-mock-api-middleware";
@@ -19,7 +20,7 @@ async function createServer() {
     server: { middlewareMode: true },
     appType: "custom",
   });
-
+  const mockMiddleWare = createMockMiddle(path.resolve(__dirname, "mock"), {});
   // use vite's connect instance as middleware
   // if you use your own express router (express.Router()), you should use router.use
   app.use(vite.middlewares);
@@ -27,13 +28,7 @@ async function createServer() {
   // const mockApiMiddleware = mock(path.resolve(__dirname, "mock"), {
   //   ignore: ["asm.js"],
   // });
-  app.use("/", (req, res, next) => {
-    if (req.path === "/api3/test") {
-      res.send({ code: "412", msg: "mock" });
-    }
-    console.log("req", req.path);
-    next();
-  });
+  app.use("/", mockMiddleWare);
   app.use(
     "/api3",
     proxy({

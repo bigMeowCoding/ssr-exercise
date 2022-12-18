@@ -1,5 +1,5 @@
 export default {
-  "GET /test": {
+  "post /api3/test": {
     id: 101,
     userName: "bob",
     email: "bob@gmail.com",
