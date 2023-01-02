@@ -3,16 +3,21 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import { createServer as createViteServer } from "vite";
-import httpProxy from "http-proxy-middleware";
-import createMockMiddle from "./middleware/mock-api-middleware.js";
-const proxy = httpProxy.createProxyMiddleware;
+// import httpProxy from "http-proxy-middleware";
+// import createMockMiddle from "./middleware/mock-api-middleware.js";
+
+// const proxy = httpProxy.createProxyMiddleware;
 
 // import mock from "express-mock-api-middleware";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === "development";
+const resolve = (p) => path.resolve(__dirname, p);
+
+const port = 5173;
+
 async function createServer() {
   const app = express();
-  const resolve = (p) => path.resolve(__dirname, p);
 
   // Create Vite server in middleware mode and configure the app type as
   // 'custom', disabling Vite's own HTML serving logic so parent server
@@ -20,20 +25,21 @@ async function createServer() {
   let vite = null;
   if (isDev) {
     vite = await createViteServer({
+      base:'/test/',
       server: { middlewareMode: true },
       appType: "custom",
     });
-    const mockMiddleWare = createMockMiddle(
-      path.resolve(__dirname, "mock"),
-      {}
-    );
+    // const mockMiddleWare = createMockMiddle(
+    //   path.resolve(__dirname, "mock"),
+    //   {}
+    // );
     // use vite's connect instance as middleware
     // if you use your own express router (express.Router()), you should use router.use
     app.use(vite.middlewares);
   } else {
     app.use((await import("compression")).default());
     app.use(
-      "/",
+      "/test/",
       (await import("serve-static")).default(resolve("dist/client"), {
         index: false,
       })
@@ -56,8 +62,8 @@ async function createServer() {
   //   })
   // );
 
-  app.use("*", async (req, res, next) => {
-    const url = req.originalUrl;
+  app.use("*", async (req, res) => {
+    const url = req.originalUrl.replace("/test/", "/");
 
     try {
       // 1. Read index.html
@@ -69,7 +75,7 @@ async function createServer() {
         "utf-8"
       );
 
-      let render = null;
+      let render;
       if (isDev) {
         template = await vite.transformIndexHtml(url, template);
         const ret = await vite.ssrLoadModule("/src/entry-server.js");
@@ -98,7 +104,10 @@ async function createServer() {
     }
   });
 
-  app.listen(5173);
+  app.listen(port, () => {
+    console.log(`http://localhost:${port}`)
+
+  });
 }
 
 createServer();

@@ -23,6 +23,7 @@ specifiers:
   vite-plugin-require-transform: ^1.0.4
   vue: ^3.2.45
   vue-loader: ^17.0.1
+  vue-router: ^4.1.6
   webpack: ^5.75.0
   webpack-cli: ^5.0.1
   webpack-merge: ^5.8.0
@@ -48,6 +49,7 @@ dependencies:
   vite-plugin-require-transform: registry.npmmirror.com/vite-plugin-require-transform/1.0.4
   vue: registry.npmmirror.com/vue/3.2.45
   vue-loader: registry.npmmirror.com/vue-loader/17.0.1_vue@3.2.45+webpack@5.75.0
+  vue-router: registry.npmmirror.com/vue-router/4.1.6_vue@3.2.45
   webpack: registry.npmmirror.com/webpack/5.75.0_webpack-cli@5.0.1
   webpack-cli: registry.npmmirror.com/webpack-cli/5.0.1_webpack@5.75.0
   webpack-merge: registry.npmmirror.com/webpack-merge/5.8.0
@@ -964,6 +966,12 @@ packages:
       - velocityjs
       - walrus
       - whiskers
+    dev: false
+
+  registry.npmmirror.com/@vue/devtools-api/6.4.5:
+    resolution: {integrity: sha512-JD5fcdIuFxU4fQyXUu3w2KpAJHzTVdN+p4iOX2lMWSHMOoQdMAcpFLZzm9Z/2nmsoZ1a96QEhZ26e50xLBsgOQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vue/devtools-api/-/devtools-api-6.4.5.tgz}
+    name: '@vue/devtools-api'
+    version: 6.4.5
     dev: false
 
   registry.npmmirror.com/@vue/reactivity-transform/3.2.45:
@@ -4650,6 +4658,18 @@ packages:
       loader-utils: registry.npmmirror.com/loader-utils/2.0.4
       vue: registry.npmmirror.com/vue/3.2.45
       webpack: registry.npmmirror.com/webpack/5.75.0_webpack-cli@5.0.1
+    dev: false
+
+  registry.npmmirror.com/vue-router/4.1.6_vue@3.2.45:
+    resolution: {integrity: sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue-router/-/vue-router-4.1.6.tgz}
+    id: registry.npmmirror.com/vue-router/4.1.6
+    name: vue-router
+    version: 4.1.6
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@vue/devtools-api': registry.npmmirror.com/@vue/devtools-api/6.4.5
+      vue: registry.npmmirror.com/vue/3.2.45
     dev: false
 
   registry.npmmirror.com/vue-style-loader/4.1.3:

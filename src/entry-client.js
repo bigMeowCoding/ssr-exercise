@@ -1,8 +1,11 @@
 import { createSSRApp } from "vue/dist/vue.esm-bundler";
-import app from "./components/app.vue";
+import App from "./components/app.vue";
+import { createRouter } from "./router.js";
 
 function createApp() {
-  return createSSRApp(app);
+  const app = createSSRApp(App);
+  app.use(createRouter());
+  return app;
 }
 
 createApp().mount("#app");
