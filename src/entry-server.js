@@ -1,8 +1,10 @@
 import { renderToString } from "vue/server-renderer";
-import createApp from "./app.js";
+import { createSSRApp  } from "vue";
+import App from "./components/app.vue";
+
 
 export async function render(url, manifest) {
-  const app = createApp();
+  const app = createSSRApp(App);
 
   const ctx = {};
   const html = await renderToString(app, ctx);
