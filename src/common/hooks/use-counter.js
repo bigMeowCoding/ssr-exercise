@@ -8,8 +8,10 @@ export const useCounter = defineStore("counter", {
   // state: () => ({ count: 0 })
   actions: {
     increment() {
-      console.log('iiiii')
       this.count++;
+    },
+    decrease() {
+      this.count--;
     },
   },
 });

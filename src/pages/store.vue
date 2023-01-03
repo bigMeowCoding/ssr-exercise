@@ -1,17 +1,20 @@
 <template>
-  <p>{{ counter.count }}</p>
-  <button @click="counter.increment">increment</button>
+  <div class="flex flex-col justify-center">
+    <show />
+    <add />
+    <min />
+  </div>
+
 </template>
 
 <script>
-import { useCounter } from "../common/hooks/use-counter.js";
+import Show from "../components/show.vue";
+import Add from "../components/add.vue";
+import Min from "../components/min.vue";
 
 export default {
   name: "store",
-  setup() {
-    const counter = useCounter();
-    return { counter };
-  },
+  components: { Min, Add, Show },
 };
 </script>
 
